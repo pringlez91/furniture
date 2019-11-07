@@ -1,0 +1,50 @@
+<h1 class="mt-4">Dashboard</h1>
+<% include ./partials/messages %>
+
+<p class="lead mb-3">Welcome <%= name %> </p>
+<a href="/buyer/logout" class="btn btn-secondary">Logout</a>
+<a href="/buyer/dashbuyer/passb" class="btn btn-secondary">Change Password</a>
+<button id="loc"></button>
+<a href="/buyer/dashbuyer/browse" class="btn btn-secondary">Browse Products</a>
+<script>
+  window.onload = function() {
+    document.getElementById("loc").click();
+  };
+
+  document.getElementById("loc").addEventListener('click', (evt) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        let req = new XMLHttpRequest();
+        req.open('POST', '/buyer/location');
+        req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        let obj = {
+          long: parseInt(position.coords.longitude),
+          lat: parseInt(position.coords.latitude)
+        };
+        req.send(JSON.stringify(obj));
+      });
+
+    } else {
+      let req = new XMLHttpRequest();
+      req.open('POST', '/buyer/location');
+      req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      let obj = {
+        long: null,
+        lat: null
+      };
+      req.send(JSON.stringify(obj));
+
+    };
+  });
+</script>
+
+<style type="text/css">
+  #loc {
+    display: none;
+  }
+</style>
+<style type="text/css">
+  #navv {
+    display: none;
+  }
+</style>
